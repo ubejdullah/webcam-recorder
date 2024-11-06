@@ -1,123 +1,172 @@
-
 .container {
-    text-align: absolute;
-    max-width: 900px;
-    width: 100%;
-    padding: 20px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1); /* Hellerer transparenter Hintergrund */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-    position: relative; /* Für die Animation */
-    font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 900px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  font-family: 'Arial', sans-serif;
+}
+
+.recording .video {
+  border: 5px solid red;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
   }
-  
-  .recording .video {
-    border: 5px solid red; /* Rote Umrandung während der Aufnahme */
-    animation: pulse 1s infinite; /* Pulsierende Animation */
+  50% {
+    transform: scale(1.03);
   }
-  
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-    100% {
-      transform: scale(1);
-    }
+  100% {
+    transform: scale(1);
   }
-  
-  .video {
-    border-radius: 10px;
-    width: 100%;
-    max-height: 500px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  }
-  
-  .controls {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column; /* Buttons untereinander */
-  }
-  
-  .brightness-label {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .brightness-slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 10px;
-    border-radius: 5px;
-    background: #61dafb; /* Helle Farbe für den Schieberegler */
-    outline: none;
-  }
-  
-  .brightness-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #fff; /* Weißer Daumen */
-    cursor: pointer;
-  }
-  
-  .brightness-slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #fff; /* Weißer Daumen */
-    cursor: pointer;
-  }
-  
-  .mode-buttons {
-    display: flex; /* Nebeneinander anordnen */
-    justify-content: center; /* Zentriert */
-    margin-top: 10px; /* Abstand nach oben */
-  }
-  
-  .record-button, .photo-button, .download-button {
-    flex: 1; /* Gleiche Breite für alle Buttons */
-    margin: 0 5px; /* Abstand zwischen den Buttons */
-    padding: 15px 20px; /* Größere Padding für größere Buttons */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s;
-  }
-  
-  .record-button {
-    background-color: #ff3b30; /* Rote Farbe für Aufnahme */
-    color: white;
-  }
-  
-  .record-button:hover {
-    background-color: #d00000; /* Dunkleres Rot bei Hover */
-  }
-  
-  .photo-button {
-    background-color: #4caf50; /* Grüne Farbe für Foto */
-    color: white;
-  }
-  
-  .photo-button:hover {
-    background-color: #388e3c; /* Dunkleres Grün bei Hover */
-  }
-  
-  .download-button {
-    background-color: #61dafb; /* Helle Farbe für Download */
-    color: black;
-    min-width: 150px; /* Minimale Breite für den Download-Button */
-    padding: 10px 20px; /* Padding anpassen */
-    margin-top: 10px;
-  }
-  
-  .download-button:disabled {
-    background-color: #888; /* Graue Farbe für deaktivierten Button */
-    cursor: not-allowed;
-  }
-  
+}
+
+.video {
+  border-radius: 10px;
+  width: 100%;
+  max-height: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.controls {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.brightness-label {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.brightness-slider {
+  -webkit-appearance: none;
+  max-width: 600px;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  background: #61dafb;
+  outline: none;
+}
+
+.brightness-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.brightness-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.mode-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.record-button,
+.photo-button,
+.download-button {
+  padding: 15px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  max-width: 600px;
+}
+
+.record-button {
+  background-color: #ff3b30;
+  color: white;
+  flex: 1;
+  margin-right: 5px;
+  background: linear-gradient(135deg, #ff3b30, #d00000);
+}
+
+.record-button:hover {
+  background: linear-gradient(135deg, #d00000, #ff3b30);
+  transform: scale(1.03);
+}
+
+.photo-button {
+  background-color: #4caf50;
+  color: white;
+  flex: 1;
+  margin-left: 2.5px;
+  background: linear-gradient(135deg, #4caf50, #388e3c);
+}
+
+.photo-button:hover {
+  background: linear-gradient(135deg, #388e3c, #4caf50);
+  transform: scale(1.03);
+}
+
+.download-button {
+  background-color: #61dafb;
+  color: black;
+  padding: 15px 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #61dafb, #2196f3);
+}
+
+.download-button:hover {
+  background: linear-gradient(135deg, #2196f3, #61dafb);
+  transform: scale(1.03);
+}
+
+.download-button:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
+
+.online-users-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  width: auto;
+  max-width: 350px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  font-family: 'Arial', sans-serif;
+}
+
+.online-users-container .icon {
+  color: white;
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.online-users-container .online-users-count {
+  font-size: 1.2rem;
+  color: white;
+  font-weight: bold;
+}
