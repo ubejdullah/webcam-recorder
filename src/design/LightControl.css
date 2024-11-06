@@ -1,4 +1,4 @@
-.control-container {
+.light-control-container {
   position: absolute;
   left: 20px;
   top: 50%;
@@ -75,39 +75,4 @@
 
 .brightness-slider:hover::-moz-range-thumb {
   transform: scale(1.2);
-}
-
-.drag-control {
-  margin-top: 15px;
-  text-align: center;
-}
-
-.drag-buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px; /* Abstand zwischen den Buttons */
-  margin-top: 10px;
-}
-
-.drag-left, .drag-right {
-  padding: 10px;
-  background-color: #333;
-  border: none;
-  border-radius: 1rem;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 15rem;
-}
-
-.drag-left:hover, .drag-right:hover {
-  background-color: #555;
-}
-
-.drag-left:active, .drag-right:active {
-  background-color: #777;
-}
-
-.drag-left, .drag-right {
-  font-size: 1.5rem; /* Etwas größere Schrift */
 }

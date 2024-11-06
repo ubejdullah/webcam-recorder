@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { SlUser } from 'react-icons/sl';  // Importiere das SlUser Icon
 import Draggable from 'react-draggable';  // Importiere die Draggable-Komponente
-import './CamVideo.css';
+import '/src/design/CamVideo.css';
 
 const CamVideo = () => {
   const videoRef = useRef(null);
