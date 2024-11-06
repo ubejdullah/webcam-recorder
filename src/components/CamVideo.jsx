@@ -1,130 +1,136 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { SlUser } from 'react-icons/sl';  // Importiere das SlUser Icon
+import Draggable from 'react-draggable';  // Importiere die Draggable-Komponente
 import './CamVideo.css';
 
 const CamVideo = () => {
-    const videoRef = useRef(null);
-    const mediaRecorderRef = useRef(null);
-    const [brightness, setBrightness] = useState(100);
-    const [recording, setRecording] = useState(false);
-    const [recordedChunks, setRecordedChunks] = useState([]);
-    const [onlineUsers, setOnlineUsers] = useState(1);  // Statisch auf 1 gesetzt
+  const videoRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const [brightness, setBrightness] = useState(100);
+  const [recording, setRecording] = useState(false);
+  const [recordedChunks, setRecordedChunks] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState(1);  // Statisch auf 1 gesetzt
 
-    useEffect(() => {
-        const getVideoStream = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
-
-                    mediaRecorderRef.current = new MediaRecorder(stream, {
-                        mimeType: 'video/webm; codecs=vp8, opus'
-                    });
-
-                    mediaRecorderRef.current.ondataavailable = (event) => {
-                        if (event.data.size > 0) {
-                            setRecordedChunks((prev) => prev.concat(event.data));
-                        }
-                    };
-                }
-            } catch (error) {
-                console.error("Error accessing webcam: ", error);
-            }
-        };
-
-        getVideoStream();
-    }, []);
-
-    const handleBrightnessChange = (event) => {
-        setBrightness(event.target.value);
+  useEffect(() => {
+    const getVideoStream = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
-            videoRef.current.style.filter = `brightness(${event.target.value}%)`;
+          videoRef.current.srcObject = stream;
+
+          mediaRecorderRef.current = new MediaRecorder(stream, {
+            mimeType: 'video/webm; codecs=vp8, opus',
+          });
+
+          mediaRecorderRef.current.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              setRecordedChunks((prev) => prev.concat(event.data));
+            }
+          };
         }
+      } catch (error) {
+        console.error('Error accessing webcam: ', error);
+      }
     };
 
-    const startRecording = () => {
-        setRecordedChunks([]); // Vorherige Aufnahmen löschen
-        mediaRecorderRef.current.start();
-        setRecording(true);
-    };
+    getVideoStream();
+  }, []);
 
-    const stopRecording = () => {
-        mediaRecorderRef.current.stop();
-        setRecording(false);
-    };
+  const handleBrightnessChange = (event) => {
+    setBrightness(event.target.value);
+    if (videoRef.current) {
+      videoRef.current.style.filter = `brightness(${event.target.value}%)`;
+    }
+  };
 
-    const downloadRecording = () => {
-        const blob = new Blob(recordedChunks, { type: 'video/webm' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'recording.mp4';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    };
+  const startRecording = () => {
+    setRecordedChunks([]); // Vorherige Aufnahmen löschen
+    mediaRecorderRef.current.start();
+    setRecording(true);
+  };
 
-    const takePhoto = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = videoRef.current.videoWidth;
-        canvas.height = videoRef.current.videoHeight;
-        const context = canvas.getContext('2d');
-        context.filter = `brightness(${brightness}%)`;
-        context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob((blob) => {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'photo.png';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }, 'image/png');
-    };
+  const stopRecording = () => {
+    mediaRecorderRef.current.stop();
+    setRecording(false);
+  };
 
-    return (
-        <div className={`container ${recording ? 'recording' : ''}`}>
-            {/* Anzeige für Online-Nutzer */}
-            <div className="online-users-container">
-                <SlUser className="icon" size={24} />
-                <span className="online-users-count">Online: {onlineUsers} Nutzer</span>
-            </div>
+  const downloadRecording = () => {
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'recording.mp4';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
 
-            <video
-                ref={videoRef}
-                autoPlay
-                className="video"
-                style={{
-                    filter: `brightness(${brightness}%)`,
-                }}
-            ></video>
-            <div className="controls">
-                <label htmlFor="brightness" className="brightness-label">Helligkeit: {brightness}%</label>
-                <input
-                    type="range"
-                    id="brightness"
-                    min="0"
-                    max="200"
-                    value={brightness}
-                    onChange={handleBrightnessChange}
-                    className="brightness-slider"
-                />
-                <div className="mode-buttons">
-                    <button onClick={recording ? stopRecording : startRecording} className="record-button">
-                        {recording ? 'Video beenden' : 'Video aufnehmen'}
-                    </button>
-                    <button onClick={takePhoto} className="photo-button">
-                        Foto aufnehmen
-                    </button>
-                </div>
-                {recordedChunks.length > 0 && !recording && (
-                    <button onClick={downloadRecording} className="download-button">
-                        Video herunterladen
-                    </button>
-                )}
-            </div>
+  const takePhoto = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+    const context = canvas.getContext('2d');
+    context.filter = `brightness(${brightness}%)`;
+    context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+    canvas.toBlob((blob) => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'photo.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }, 'image/png');
+  };
+
+  return (
+    <Draggable>
+      <div className={`container ${recording ? 'recording' : ''}`}>
+        {/* Anzeige für Online-Nutzer */}
+        <div className="online-users-container">
+          <SlUser className="icon" size={24} />
+          <span className="online-users-count">Online: {onlineUsers} Nutzer</span>
         </div>
-    );
+
+        <video
+          ref={videoRef}
+          autoPlay
+          className="video"
+          style={{
+            filter: `brightness(${brightness}%)`,
+          }}
+        ></video>
+
+        <div className="controls">
+          <label htmlFor="brightness" className="brightness-label">
+            Helligkeit: {brightness}%
+          </label>
+          <input
+            type="range"
+            id="brightness"
+            min="0"
+            max="200"
+            value={brightness}
+            onChange={handleBrightnessChange}
+            className="brightness-slider"
+          />
+          <div className="mode-buttons">
+            <button onClick={recording ? stopRecording : startRecording} className="record-button">
+              {recording ? 'Video beenden' : 'Video aufnehmen'}
+            </button>
+            <button onClick={takePhoto} className="photo-button">
+              Foto aufnehmen
+            </button>
+          </div>
+          {recordedChunks.length > 0 && !recording && (
+            <button onClick={downloadRecording} className="download-button">
+              Video herunterladen
+            </button>
+          )}
+        </div>
+      </div>
+    </Draggable>
+  );
 };
 
 export default CamVideo;
