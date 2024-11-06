@@ -1,6 +1,6 @@
 
 .container {
-    text-align: center;
+    text-align: absolute;
     max-width: 900px;
     width: 100%;
     padding: 20px;
@@ -8,6 +8,7 @@
     background: rgba(255, 255, 255, 0.1); /* Hellerer transparenter Hintergrund */
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
     position: relative; /* Für die Animation */
+    font-family: 'Arial', sans-serif;
   }
   
   .recording .video {
