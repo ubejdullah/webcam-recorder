@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { SlUser } from 'react-icons/sl';  // Importiere das SlUser Icon
 import Draggable from 'react-draggable';  // Importiere die Draggable-Komponente
-import { CiMapPin } from 'react-icons/ci'; // Pin-Icon aus react-icons
+import Pin from '../UI/Pin.jsx'; // Importiere den Pin aus dem Ordner ui-elements
 import '/src/design/CamVideo.css'; // Deine CSS-Styles für die CamVideo-Komponente
 
 const CamVideo = () => {
@@ -103,14 +103,8 @@ const CamVideo = () => {
       disabled={isFixed} // Wenn fixiert, dann kann nicht mehr gezogen werden
     >
       <div className={`container ${recording ? 'recording' : ''}`}>
-        {/* Pin über dem Container */}
-        <div className="pin-container" onClick={toggleFixation}>
-          <CiMapPin
-            className={`pin ${isFixed ? 'fixed' : ''}`}
-            size={30} // Pin bleibt klein
-          />
-        </div>
-
+      <Pin onClick={toggleFixation} isFixed={isFixed} />
+      
         {/* Anzeige für Online-Nutzer */}
         <div className="online-users-container">
           <SlUser className="icon" size={24} />

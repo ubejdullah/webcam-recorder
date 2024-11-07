@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Importiere Pfeil-Icons von React Icons
 import Draggable from 'react-draggable'; // Importiere Draggable
 import '/src/design/MovementControl.css'; // Styles für die Steuerkomponente
-import { CiMapPin } from 'react-icons/ci'; // Pin-Icon aus react-icons
+import Pin from '../UI/Pin.jsx'; // Importiere den Pin aus dem Ordner ui-elements
 
 const MovementControl = () => {
   const [isFixed, setIsFixed] = useState(true); // Zustand für Fixierung des Containers
@@ -25,13 +25,7 @@ const MovementControl = () => {
       disabled={isFixed} // Wenn fixiert, dann kann nicht mehr gezogen werden
     >
       <div className="movement-control-container">
-        {/* Pin über dem Container */}
-        <div className="pin-container" onClick={toggleFixation}>
-          <CiMapPin
-            className={`pin ${isFixed ? 'fixed' : ''}`}
-            size={30} // Pin bleibt klein
-          />
-        </div>
+      <Pin onClick={toggleFixation} isFixed={isFixed} />
 
         {/* Drag Control Bereich */}
         <div className="drag-control">
