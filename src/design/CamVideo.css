@@ -9,7 +9,6 @@
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-  font-family: 'Arial', sans-serif;
 }
 
 .recording .video {
@@ -156,7 +155,6 @@
   width: auto;
   max-width: 350px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  font-family: 'Arial', sans-serif;
 }
 
 .online-users-container .icon {
@@ -168,5 +166,4 @@
 .online-users-container .online-users-count {
   font-size: 1.2rem;
   color: white;
-  font-weight: bold;
 }

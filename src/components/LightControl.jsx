@@ -57,7 +57,7 @@ const ControlComponent = ({ onBrightnessChange, onLightToggle, lightState, brigh
         </div>
 
         <div className="brightness-control">
-          <label htmlFor="brightness">Lichtstärke: {localBrightness}%</label>
+          <label htmlFor="brightness">{localBrightness}%</label>
           <input
             type="range"
             id="brightness"

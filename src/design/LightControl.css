@@ -10,7 +10,6 @@
   color: white;
   width: 500px;
   height: 130x;
-  font-family: 'Arial', sans-serif;
   position: relative; /* Notwendig für die Positionierung des Pins */
 }
 
@@ -29,14 +28,14 @@
 }
 
 .light-toggle-button.on {
-  background-color: #ff5722;
+  background-color: red;
 }
 
 .light-toggle-button.off {
   background-color: #4caf50;
 }
 
-.light-toggle-button.on:hover {
+.light-toggle-button.off:hover {
   background-color: #388e3c;
 }
 
