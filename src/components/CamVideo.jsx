@@ -5,85 +5,51 @@ import Pin from '../UI/Pin.jsx'; // Importiere den Pin aus dem Ordner ui-element
 import '/src/design/CamVideo.css'; // Deine CSS-Styles für die CamVideo-Komponente
 
 const CamVideo = () => {
-  const videoRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
+  const canvasRef = useRef(null);  // Referenz für das Canvas
+  const videoRef = useRef(null);   // Referenz für das externe Video
   const [brightness, setBrightness] = useState(100);
-  const [recording, setRecording] = useState(false);
-  const [recordedChunks, setRecordedChunks] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState(1);  // Statisch auf 1 gesetzt
   const [isFixed, setIsFixed] = useState(true); // Zustand für Fixierung des Containers
   const [position, setPosition] = useState({ x: 0, y: 0 }); // Position des Containers für das Draggen
 
   useEffect(() => {
-    const getVideoStream = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+    // Lade das externe Video in das Video-Element
+    const videoElement = videoRef.current;
+    videoElement.src = "https://fuzzy-space-halibut-5gqp94r657wqc4p4w-5000.app.github.dev/video_feed";
+    videoElement.play();
 
-          mediaRecorderRef.current = new MediaRecorder(stream, {
-            mimeType: 'video/webm; codecs=vp8, opus',
-          });
+    // Stelle sicher, dass das Video erst geladen wird
+    videoElement.onloadeddata = () => {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
 
-          mediaRecorderRef.current.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-              setRecordedChunks((prev) => prev.concat(event.data));
-            }
-          };
+      const drawVideoToCanvas = () => {
+        if (videoElement && canvas) {
+          // Leere das Canvas
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.filter = `brightness(${brightness}%)`;  // Filter anwenden
+          // Zeichne das Video auf das Canvas
+          context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
         }
-      } catch (error) {
-        console.error('Error accessing webcam: ', error);
-      }
+        requestAnimationFrame(drawVideoToCanvas);  // Nächster Frame
+      };
+
+      drawVideoToCanvas(); // Starte das Zeichnen des Videos
     };
 
-    getVideoStream();
-  }, []);
+    // Wenn das Video zu Ende ist, starten wir es wieder
+    videoElement.onended = () => {
+      videoElement.play();  // Starte das Video wieder, wenn es zu Ende ist
+    };
+
+    return () => {
+      // Wenn das Component unmontiert wird, stoppen wir das Video
+      videoElement.pause();
+    };
+  }, [brightness]);
 
   const handleBrightnessChange = (event) => {
-    setBrightness(event.target.value);
-    if (videoRef.current) {
-      videoRef.current.style.filter = `brightness(${event.target.value}%)`;
-    }
-  };
-
-  const startRecording = () => {
-    setRecordedChunks([]); // Vorherige Aufnahmen löschen
-    mediaRecorderRef.current.start();
-    setRecording(true);
-  };
-
-  const stopRecording = () => {
-    mediaRecorderRef.current.stop();
-    setRecording(false);
-  };
-
-  const downloadRecording = () => {
-    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'recording.mp4';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-
-  const takePhoto = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
-    const context = canvas.getContext('2d');
-    context.filter = `brightness(${brightness}%)`;
-    context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-    canvas.toBlob((blob) => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'photo.png';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }, 'image/png');
+    setBrightness(event.target.value);  // Helligkeit ändern
   };
 
   const toggleFixation = () => {
@@ -102,23 +68,29 @@ const CamVideo = () => {
       onDrag={handleDrag}
       disabled={isFixed} // Wenn fixiert, dann kann nicht mehr gezogen werden
     >
-      <div className={`container ${recording ? 'recording' : ''}`}>
-      <Pin onClick={toggleFixation} isFixed={isFixed} />
-      
+      <div className={`container ${brightness === 100 ? '' : 'recording'}`}>
+        <Pin onClick={toggleFixation} isFixed={isFixed} />
+        
         {/* Anzeige für Online-Nutzer */}
         <div className="online-users-container">
           <SlUser className="icon" size={24} />
           <span className="online-users-count">Online: {onlineUsers} Nutzer</span>
         </div>
 
-        <video
-          ref={videoRef}
-          autoPlay
+        {/* Canvas, auf dem der externe Video-Feed gezeichnet wird */}
+        <canvas
+          ref={canvasRef}
+          id="canvas"
           className="video"
           style={{
-            filter: `brightness(${brightness}%)`,
+            filter: `brightness(${brightness}%)`,  // Helligkeitseinstellung anwenden
           }}
-        ></video>
+        ></canvas>
+
+        <video
+          ref={videoRef}
+          style={{ display: 'none' }}  // Video ist unsichtbar, da wir es nur als Quelle für das Canvas verwenden
+        />
 
         <div className="controls">
           <label htmlFor="brightness" className="brightness-label">
@@ -133,19 +105,6 @@ const CamVideo = () => {
             onChange={handleBrightnessChange}
             className="brightness-slider"
           />
-          <div className="mode-buttons">
-            <button onClick={recording ? stopRecording : startRecording} className="record-button">
-              {recording ? 'Video beenden' : 'Video aufnehmen'}
-            </button>
-            <button onClick={takePhoto} className="photo-button">
-              Foto aufnehmen
-            </button>
-          </div>
-          {recordedChunks.length > 0 && !recording && (
-            <button onClick={downloadRecording} className="download-button">
-              Video herunterladen
-            </button>
-          )}
         </div>
       </div>
     </Draggable>
