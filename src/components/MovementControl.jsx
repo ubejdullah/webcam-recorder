@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Importiere Pfeil-Icons von React Icons
 import Draggable from 'react-draggable'; // Importiere Draggable
 import '/src/design/MovementControl.css'; // Styles für die Steuerkomponente
 import { CiMapPin } from 'react-icons/ci'; // Pin-Icon aus react-icons
 
 const MovementControl = () => {
-  const [isFixed, setIsFixed] = useState(false); // Zustand für Fixierung des Containers
-  const [position, setPosition] = useState({ x: 0, y: 0 }); // Position des Containers für das Draggen
+  const [isFixed, setIsFixed] = useState(true); // Zustand für Fixierung des Containers
+  const [position, setPosition] = useState({ x: 1122, y: 313 }); // Position des Containers für das Draggen
 
   const toggleFixation = () => {
     setIsFixed(!isFixed); // Toggle zwischen fixiert und nicht fixiert

@@ -11,7 +11,7 @@ const CamVideo = () => {
   const [recording, setRecording] = useState(false);
   const [recordedChunks, setRecordedChunks] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState(1);  // Statisch auf 1 gesetzt
-  const [isFixed, setIsFixed] = useState(false); // Zustand für Fixierung des Containers
+  const [isFixed, setIsFixed] = useState(true); // Zustand für Fixierung des Containers
   const [position, setPosition] = useState({ x: 0, y: 0 }); // Position des Containers für das Draggen
 
   useEffect(() => {
