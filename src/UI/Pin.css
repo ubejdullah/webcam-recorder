@@ -1,0 +1,30 @@
+.pin-container {
+    position: absolute;
+    top: -10px; /* Setzt den Pin über den Container */
+    right: -10px; /* Setzt den Pin nach rechts */
+    cursor: pointer;
+    z-index: 10; /* Der Pin soll immer oben bleiben */
+  }
+  
+  /* Standard Pin Style */
+  .pin {
+    transition: transform 0.5s ease, stroke-width 0.3s ease, fill 0.3s ease; /* Animation für Größe, Linienbreite und Füllung */
+    stroke: black; /* Standard Linienfarbe */
+    stroke-width: 2; /* Standard Linienbreite */
+    fill: none; /* Standard Füllung leer */
+  }
+  
+  /* Wenn der Container fixiert ist (Pin neonrot) */
+  .pin.fixed {
+    stroke-width: 2; /* Dickerer Rand wenn fixiert */
+    fill: #ff073a; /* Neonrot, innen gefärbt */
+    stroke: #ff073a; /* Der Rand wird auch rot */
+  }
+  
+  /* Wenn der Container nicht fixiert ist (Pin neonblau) */
+  .pin:not(.fixed) {
+    stroke-width: 2; /* Dünnerer Rand wenn nicht fixiert */
+    fill: #00d4ff; /* Neonblau, innen gefärbt */
+    stroke: #00d4ff; /* Rand wird ebenfalls neonblau */
+  }
+  

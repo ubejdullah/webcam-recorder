@@ -1,29 +1,50 @@
 import React, { useState } from 'react';
 import Draggable from 'react-draggable'; // Importiere Draggable
+import Pin from '../UI/Pin.jsx'; // Importiere den Pin aus dem Ordner ui-elements
 import '/src/design/LightControl.css'; // Styles für die Steuerkomponente
 
 const ControlComponent = ({ onBrightnessChange, onLightToggle, lightState, brightness, onDrag }) => {
   const [localBrightness, setLocalBrightness] = useState(brightness);
-  const [isLightOn, setisLightOn] = useState(lightState); // Verwende 'lightState' für das Prop
+  const [isLightOn, setIsLightOn] = useState(lightState);
+  const [position, setPosition] = useState({ x: 0, y: 0 }); // Position des Containers für das Draggen
+  const [isFixed, setIsFixed] = useState(false); // Zustand für Fixierung des Containers
 
   const LightOn = () => {
-    // Licht ein-/ausschalten
-    setisLightOn(true);
+    setIsLightOn(true);
   };
 
   const LightOff = () => {
-    // Licht ein-/ausschalten
-    setisLightOn(false);
+    setIsLightOn(false);
   };
 
   const handleBrightnessChange = (event) => {
-    setLocalBrightness(event.target.value); // Helligkeit anpassen
+    setLocalBrightness(event.target.value);
     onBrightnessChange(event.target.value); // Übertragen des Werts an die CamVideo-Komponente
   };
 
+  const handleDrag = (e, data) => {
+    if (!isFixed) {
+      setPosition({ x: data.x, y: data.y });
+      if (onDrag) {
+        onDrag(data.x, data.y); // Falls eine onDrag Funktion übergeben wurde
+      }
+    }
+  };
+
+  const toggleFixation = () => {
+    setIsFixed(!isFixed);
+  };
+
   return (
-    <Draggable>
+    <Draggable
+      position={position}
+      onDrag={handleDrag}
+      disabled={isFixed} // Wenn fixiert, dann kann nicht mehr gezogen werden
+    >
       <div className="light-control-container">
+        {/* Pin-Komponente über dem Container positioniert */}
+        <Pin onClick={toggleFixation} isFixed={isFixed} />
+
         <div className="light-toggle">
           <button
             onClick={isLightOn ? LightOff : LightOn}
@@ -32,6 +53,7 @@ const ControlComponent = ({ onBrightnessChange, onLightToggle, lightState, brigh
             {isLightOn ? 'Licht ausschalten' : 'Licht einschalten'}
           </button>
         </div>
+
         <div className="brightness-control">
           <label htmlFor="brightness">Lichtstärke: {localBrightness}%</label>
           <input

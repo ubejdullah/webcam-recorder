@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { SlUser } from 'react-icons/sl';  // Importiere das SlUser Icon
 import Draggable from 'react-draggable';  // Importiere die Draggable-Komponente
-import '/src/design/CamVideo.css';
+import { CiMapPin } from 'react-icons/ci'; // Pin-Icon aus react-icons
+import '/src/design/CamVideo.css'; // Deine CSS-Styles für die CamVideo-Komponente
 
 const CamVideo = () => {
   const videoRef = useRef(null);
@@ -10,6 +11,8 @@ const CamVideo = () => {
   const [recording, setRecording] = useState(false);
   const [recordedChunks, setRecordedChunks] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState(1);  // Statisch auf 1 gesetzt
+  const [isFixed, setIsFixed] = useState(false); // Zustand für Fixierung des Containers
+  const [position, setPosition] = useState({ x: 0, y: 0 }); // Position des Containers für das Draggen
 
   useEffect(() => {
     const getVideoStream = async () => {
@@ -83,9 +86,31 @@ const CamVideo = () => {
     }, 'image/png');
   };
 
+  const toggleFixation = () => {
+    setIsFixed(!isFixed); // Toggle zwischen fixiert und nicht fixiert
+  };
+
+  const handleDrag = (e, data) => {
+    if (!isFixed) {
+      setPosition({ x: data.x, y: data.y }); // Nur verschieben, wenn der Pin nicht fixiert ist
+    }
+  };
+
   return (
-    <Draggable>
+    <Draggable
+      position={position}
+      onDrag={handleDrag}
+      disabled={isFixed} // Wenn fixiert, dann kann nicht mehr gezogen werden
+    >
       <div className={`container ${recording ? 'recording' : ''}`}>
+        {/* Pin über dem Container */}
+        <div className="pin-container" onClick={toggleFixation}>
+          <CiMapPin
+            className={`pin ${isFixed ? 'fixed' : ''}`}
+            size={30} // Pin bleibt klein
+          />
+        </div>
+
         {/* Anzeige für Online-Nutzer */}
         <div className="online-users-container">
           <SlUser className="icon" size={24} />

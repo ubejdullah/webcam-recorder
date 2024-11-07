@@ -3,15 +3,17 @@
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.8); /* Leicht dunklerer Hintergrund */
+  background: rgba(0, 0, 0, 0.8); /* Standard dunkler Hintergrund */
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
   color: white;
   width: 570px;
   font-family: 'Arial', sans-serif;
+  position: relative; /* Notwendig für die Positionierung des Pins */
 }
 
+/* Lichtsteuer-Button */
 .light-toggle-button {
   width: 100%;
   padding: 12px;
@@ -37,6 +39,7 @@
   background-color: #388e3c;
 }
 
+/* Helligkeitsslider */
 .brightness-control {
   margin-top: 15px;
 }
