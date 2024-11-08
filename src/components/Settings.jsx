@@ -8,9 +8,9 @@ const Settings = ({ onToggleComponent }) => {
 
   // Zustand für die einzelnen Komponenten
   const [componentStates, setComponentStates] = useState({
-    Video: true, // Standardmäßig aktiviert
-    KameraBewegung: true, // Standardmäßig aktiviert
-    LichtKontrolle: true, // Standardmäßig aktiviert
+    Kamera: true, // Standardmäßig aktiviert
+    Bewegung: true, // Standardmäßig aktiviert
+    Licht: true, // Standardmäßig aktiviert
   });
 
   // Handle für das Umschalten des jeweiligen Components

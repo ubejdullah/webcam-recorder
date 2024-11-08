@@ -6,9 +6,9 @@ import Settings from './components/Settings'; // Importiere die Settings-Kompone
 
 const App = () => {
   const [visibleComponents, setVisibleComponents] = useState({
-    Video: true, // Standardmäßig aktiviert
-    KameraBewegung: true, // Standardmäßig aktiviert
-    LichtKontrolle: true, // Standardmäßig aktiviert
+    Kamera: true, // Standardmäßig aktiviert
+    Bewegung: true, // Standardmäßig aktiviert
+    Licht: true, // Standardmäßig aktiviert
   });
 
   // Handle für das Umschalten der Sichtbarkeit
@@ -24,9 +24,9 @@ const App = () => {
       <Settings onToggleComponent={handleToggleComponent} />
 
       {/* Komponente wird nur gerendert, wenn der Zustand `true` ist */}
-      {visibleComponents.Video && <CamVideo />}
-      {visibleComponents.KameraBewegung && <MovementControl />}
-      {visibleComponents.LichtKontrolle && <LightControl />}
+      {visibleComponents.Kamera && <CamVideo />}
+      {visibleComponents.Bewegung && <MovementControl />}
+      {visibleComponents.Licht && <LightControl />}
     </div>
   );
 };
