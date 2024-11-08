@@ -5,9 +5,6 @@ import Pin from '../UI/Pin.jsx'; // Importiere den Pin aus dem Ordner ui-element
 import '/src/design/CamVideo.css'; // Deine CSS-Styles für die CamVideo-Komponente
 
 const CamVideo = () => {
-  const canvasRef = useRef(null);
-  const videoRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
   const [brightness, setBrightness] = useState(100);
   const [recording, setRecording] = useState(false);
   const [recordedChunks, setRecordedChunks] = useState([]);
@@ -15,60 +12,48 @@ const CamVideo = () => {
   const [isFixed, setIsFixed] = useState(true); // Zustand für Fixierung des Containers
   const [position, setPosition] = useState({ x: 0, y: 0 }); // Position des Containers für das Draggen
 
+  const [imageSrc, setImageSrc] = useState(null);  // Zum Speichern der MJPEG-Stream-Bilder
+
   useEffect(() => {
-    // Lade den Stream von der URL
-    const videoElement = videoRef.current;
-    videoElement.src = "http://10.50.25.246:7123//stream.mjpg";
-    videoElement.play();
+    const image = new Image();
+    image.src = "http://10.50.25.246:7123/stream.mjpg";  // Stream-URL
 
-    // Video auf das Canvas zeichnen
-    videoElement.onloadeddata = () => {
-      const canvas = canvasRef.current;
-      const context = canvas.getContext('2d');
-
-      const drawVideoToCanvas = () => {
-        if (videoElement && canvas) {
-          context.clearRect(0, 0, canvas.width, canvas.height);
-          context.filter = `brightness(${brightness}%)`;
-          context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-        }
-        requestAnimationFrame(drawVideoToCanvas);
-      };
-
-      drawVideoToCanvas();
+    image.onload = () => {
+      setImageSrc(image.src);  // Wenn das Bild geladen wurde, setzen wir es als Quelle
     };
 
-    videoElement.onended = () => {
-      videoElement.play();
-    };
+    // Wiederhole das Laden des nächsten Frames (MJPEG Stream)
+    const intervalId = setInterval(() => {
+      image.src = "http://10.50.25.246:7123/stream.mjpg?" + new Date().getTime(); // Verhindert Caching
+    }, 100); // Intervall für das Abrufen neuer Bilder (typisch für MJPEG)
 
     return () => {
-      videoElement.pause();
+      clearInterval(intervalId);  // Stoppe das Intervall bei der Entladung des Komponents
     };
-  }, [brightness]);
+  }, []);
 
   const handleBrightnessChange = (event) => {
     setBrightness(event.target.value);
   };
 
   const startRecording = () => {
-    const stream = videoRef.current.captureStream();
-    mediaRecorderRef.current = new MediaRecorder(stream, {
+    const stream = document.querySelector("img").captureStream();
+    const mediaRecorder = new MediaRecorder(stream, {
       mimeType: 'video/webm; codecs=vp8, opus',
     });
 
-    mediaRecorderRef.current.ondataavailable = (event) => {
+    mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         setRecordedChunks((prev) => prev.concat(event.data));
       }
     };
 
-    mediaRecorderRef.current.start();
+    mediaRecorder.start();
     setRecording(true);
   };
 
   const stopRecording = () => {
-    mediaRecorderRef.current.stop();
+    mediaRecorder.stop();
     setRecording(false);
   };
 
@@ -84,19 +69,22 @@ const CamVideo = () => {
   };
 
   const takePhoto = () => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    context.filter = `brightness(${brightness}%)`;
-    context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-    canvas.toBlob((blob) => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'photo.png';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }, 'image/png');
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    const imgElement = document.createElement("img");
+    imgElement.src = imageSrc;
+    imgElement.onload = () => {
+      context.drawImage(imgElement, 0, 0);
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'photo.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, 'image/png');
+    };
   };
 
   const toggleFixation = () => {
@@ -124,9 +112,10 @@ const CamVideo = () => {
           <span className="online-users-count">Online: {onlineUsers} Nutzer</span>
         </div>
 
-        {/* Canvas und verstecktes Video */}
-        <canvas ref={canvasRef} className="video"></canvas>
-        <video ref={videoRef} style={{ display: 'none' }}></video>
+        {/* Anzeige des MJPEG-Streams als Bild */}
+        {imageSrc && (
+          <img src={imageSrc} alt="MJPEG Stream" className="video" />
+        )}
 
         {/* Steuerungselemente */}
         <div className="controls">
