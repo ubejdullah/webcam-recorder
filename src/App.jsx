@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import CamVideo from './components/CamVideo.jsx';
 import LightControl from './components/LightControl.jsx';
 import MovementControl from './components/MovementControl.jsx';
-import Settings from './components/Settings'; // Importiere die Settings-Komponente
+import Settings from './components/Settings';
+import InfoOverlay from './components/InfoOverlay.jsx';
 
 const App = () => {
   const [visibleComponents, setVisibleComponents] = useState({
@@ -24,6 +25,7 @@ const App = () => {
       <Settings onToggleComponent={handleToggleComponent} />
 
       {/* Komponente wird nur gerendert, wenn der Zustand `true` ist */}
+      {<InfoOverlay />}
       {visibleComponents.Video && <CamVideo />}
       {visibleComponents.KameraBewegung && <MovementControl />}
       {visibleComponents.LichtKontrolle && <LightControl />}

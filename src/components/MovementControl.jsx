@@ -6,7 +6,7 @@ import Pin from '../UI/Pin.jsx'; // Importiere den Pin aus dem Ordner ui-element
 
 const MovementControl = () => {
   const [isFixed, setIsFixed] = useState(true); // Zustand für Fixierung des Containers
-  const [position, setPosition] = useState({ x: 1122, y: 313 }); // Position des Containers für das Draggen
+  const [position, setPosition] = useState({ x: 923, y: 313 }); // Position des Containers für das Draggen
 
   const toggleFixation = () => {
     setIsFixed(!isFixed); // Toggle zwischen fixiert und nicht fixiert

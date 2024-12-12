@@ -1,0 +1,115 @@
+/* Overlay für die Info */
+.info-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  justify-content: center;  /* Zentriert das Overlay */
+  align-items: center;  /* Zentriert das Overlay */
+  z-index: 1000;
+}
+
+.info-text {
+  text-align: left;  /* Richtet den Text links aus */
+  max-width: 600px;
+  padding: 20px;  /* Fügt Abstand zum Rand hinzu */
+}
+
+.info-text h1 {
+  font-size: 28px;  /* Kleinere Schriftgröße für den Titel */
+  margin-bottom: 15px;
+}
+
+.info-text p {
+  font-size: 20px;  /* Größere Schriftgröße für den Text */
+  margin-bottom: 20px;
+}
+
+/* Der Rest des CSS bleibt unverändert */
+.open-button {
+  padding: 10px 20px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.open-button:hover {
+  background-color: #0066cc;
+}
+
+/* Overlay für die Mediathek */
+.media-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.media-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 90%;
+  max-height: 80vh;
+}
+
+.media-item {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.media-controls {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+}
+
+.media-controls button {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.media-controls button:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+}
+
+.close-button {
+  margin-top: 20px;
+  padding: 10px 30px;
+  background-color: red;
+  color: white;
+  border: none;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  background-color: darkred;
+}
